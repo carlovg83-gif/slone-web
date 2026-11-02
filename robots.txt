@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://carlovg83-gif.github.io/slone-web/sitemap.xml
