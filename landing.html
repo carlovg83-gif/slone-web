@@ -144,5 +144,61 @@ footer{text-align:center;color:#555;font-size:11px;margin-top:40px;padding:20px}
   pintar();
 })();
 </script>
+
+<style>
+.mejoras{max-width:980px;margin:40px auto 0;padding:0 20px}
+.mejoras h2{color:#e3ff00;text-align:center;letter-spacing:1px;font-size:20px;margin-bottom:18px}
+.funciones{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.fn{background:#0c0c0c;border:1px solid #222;border-radius:12px;padding:16px}
+.fn .ico{font-size:22px}.fn h3{color:#fff;font-size:15px;margin:6px 0}.fn p{color:#999;font-size:13px;line-height:1.5}
+.faq{max-width:760px;margin:34px auto 0}
+details{background:#0c0c0c;border:1px solid #222;border-radius:10px;margin-bottom:8px;padding:12px 16px}
+details summary{color:#e3ff00;font-weight:800;cursor:pointer;font-size:14px}
+details p{color:#bbb;font-size:13px;margin-top:8px;line-height:1.6}
+.social{text-align:center;margin-top:30px;color:#777;font-size:13px}.social b{color:#e3ff00}
+</style>
+<div class="mejoras">
+<h2>⚡ LO QUE TE DA SLÖNE</h2>
+<div class="funciones">
+<div class="fn"><div class="ico">🏟️</div><h3>Multiview 4 pantallas</h3><p>4 partidos a la vez, cambio instantáneo.</p></div>
+<div class="fn"><div class="ico">🎙️</div><h3>FanAudio sincronizado</h3><p>Tu radio sincronizada al milisegundo con la TV.</p></div>
+<div class="fn"><div class="ico">⏪</div><h3>EPG + DVR + timeshift</h3><p>Guía completa, graba, rebobina, replay 30s.</p></div>
+<div class="fn"><div class="ico">🔒</div><h3>100% soberano</h3><p>Sin anuncios, sin telemetría. Tu lista, tu señal.</p></div>
+<div class="fn"><div class="ico">🎤</div><h3>Asistente de voz</h3><p>"Pon el canal 10" — habla y SLÖNE lo hace.</p></div>
+<div class="fn"><div class="ico">📡</div><h3>Señal anti-cortes</h3><p>Failover multi-fuente: si una cae, otra releva.</p></div>
+</div>
+<h2 style="margin-top:40px">❓ PREGUNTAS FRECUENTES</h2>
+<div class="faq">
+<details><summary>¿Necesito una suscripción IPTV?</summary><p>Sí. SLÖNE es el reproductor soberano: tú traes TU lista (M3U/Xtream).</p></details>
+<details><summary>¿Funciona en mi tele?</summary><p>Android TV, Google TV, Fire TV, Xiaomi y web. Mando universal para Samsung, LG y Roku.</p></details>
+<details><summary>¿Qué es la Tarjeta Negra Ö?</summary><p>500 unidades de acero grabadas a láser, numeradas, con acceso vitalicio.</p></details>
+<details><summary>¿Por qué "soberano"?</summary><p>Cero anuncios, cero rastreo, cero intermediarios. SLÖNE no vende tus ojos.</p></details>
+</div>
+<h2 style="margin-top:40px">🤝 COMPROMISO SLÖNE</h2>
+<div class="funciones">
+<div class="fn"><div class="ico">🚫</div><h3>Cero anuncios. Siempre.</h3><p>Ni ahora ni nunca.</p></div>
+<div class="fn"><div class="ico">🔐</div><h3>Tus datos son tuyos</h3><p>Sin telemetría ni venta a terceros.</p></div>
+<div class="fn"><div class="ico">📶</div><h3>Señal que no se corta</h3><p>Failover con 3.547 canales con respaldo.</p></div>
+<div class="fn"><div class="ico">💶</div><h3>Sin sorpresas en el precio</h3><p>Desistimiento 14 días (ley UE).</p></div>
+<div class="fn"><div class="ico">🛡️</div><h3>Legal al 100%</h3><p>Herramienta neutra. RGPD.</p></div>
+<div class="fn"><div class="ico">♾️</div><h3>Actualizaciones para siempre</h3><p>Los Fundadores no pagan más.</p></div>
+</div>
+<h2 style="margin-top:40px">🎟️ RESERVAR MI PLAZA</h2>
+<div style="max-width:520px;margin:16px auto 0">
+<form onsubmit="reservar(event)" style="display:grid;gap:10px">
+<input id="nombre" placeholder="Tu nombre" required style="padding:12px;background:#111;border:1px solid #333;border-radius:8px;color:#fff">
+<input id="email" type="email" placeholder="Tu email" required style="padding:12px;background:#111;border:1px solid #333;border-radius:8px;color:#fff">
+<select id="plan" style="padding:12px;background:#111;border:1px solid #333;border-radius:8px;color:#fff">
+<option>👑 Pionero Ö — 149€ vitalicio</option><option>⚽ Pass Sports — 3,99€/mes</option><option>🌍 SLÖNE ONE — 59,99€/año</option>
+</select>
+<button type="submit" style="padding:14px;background:#e3ff00;color:#000;font-weight:900;font-size:16px;border:none;border-radius:10px;cursor:pointer">RESERVAR AHORA</button>
+</form>
+<p style="color:#777;font-size:11px;text-align:center;margin-top:8px">Sin pago ahora · te respondemos en 24h</p>
+</div>
+</div>
+<script>
+function reservar(e){e.preventDefault();var n=document.getElementById('nombre').value;var em=document.getElementById('email').value;var p=document.getElementById('plan').value;window.location.href='mailto:contacto@slone.tv?subject='+encodeURIComponent('Reserva SLÖNE: '+p)+'&body='+encodeURIComponent('Nombre: '+n+'\nEmail: '+em+'\nPlan: '+p);}
+</script>
+
 </body>
 </html>
