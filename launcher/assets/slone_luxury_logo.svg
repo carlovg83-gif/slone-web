@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente Metálico Titanio y Cian Soberano -->
+    <linearGradient id="luxTitanium" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+    <linearGradient id="luxCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="35%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#0099FF" />
+    </linearGradient>
+    <filter id="luxGlow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ISOTIPO SOBERANO: LA 'Ö' DE RESONANCIA ÁUREA -->
+  <g transform="translate(15, 12)" filter="url(#luxGlow)">
+    <!-- 1. Anillo Exterior de Frecuencia -->
+    <circle cx="48" cy="55" r="34" fill="none" stroke="url(#luxCyan)" stroke-width="6" />
+
+    <!-- 2. Halo Interior de Resonancia Flotante -->
+    <circle cx="48" cy="55" r="18" fill="none" stroke="url(#luxCyan)" stroke-width="2.6" opacity="0.85" />
+
+    <!-- 3. Muesca de Ápice Superior -->
+    <circle cx="48" cy="21" r="2.8" fill="#030508" />
+
+    <!-- 4. Diéresis Circular Pura (Puntos Áureos, sin deformaciones) -->
+    <circle cx="37" cy="8" r="4.6" fill="url(#luxCyan)" />
+    <circle cx="59" cy="8" r="4.6" fill="url(#luxCyan)" />
+  </g>
+
+  <!-- WORDMARK OFICIAL 'SLÖNE' -->
+  <g transform="translate(125, 68)">
+    <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Helvetica Neue', sans-serif" 
+          font-size="44" 
+          font-weight="900" 
+          letter-spacing="14" 
+          fill="url(#luxTitanium)">
+      SLÖNE
+    </text>
+  </g>
+
+  <!-- SUBTÍTULO EJECUTIVO TIER-1 -->
+  <g transform="translate(128, 90)">
+    <text font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', sans-serif" 
+          font-size="9.5" 
+          font-weight="700" 
+          letter-spacing="6" 
+          fill="url(#luxCyan)" 
+          opacity="0.9">
+      SOVEREIGN MEDIA SUITE · ZERO-TRUST
+    </text>
+  </g>
+</svg>

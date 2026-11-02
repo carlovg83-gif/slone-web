@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente Soberano de Precisión Audiófila -->
+    <linearGradient id="sloneGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="30%" stop-color="#00F0FF" />
+      <stop offset="100%" stop-color="#0088FF" />
+    </linearGradient>
+    <filter id="iconSoftGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Contenedor Squircle Dark OLED -->
+  <rect width="100" height="100" rx="24" fill="#04060A" />
+  <rect width="98" height="98" x="1" y="1" rx="23" fill="none" stroke="rgba(0, 240, 255, 0.22)" stroke-width="1.2" />
+
+  <!-- ISOTIPO MAESTRO: LA 'Ö' DE FRECUENCIA & RESONANCIA CONTINUA -->
+  <g filter="url(#iconSoftGlow)">
+    <!-- 1. Anillo Exterior Acústico -->
+    <circle cx="50" cy="57" r="26" fill="none" stroke="url(#sloneGlow)" stroke-width="5.5" stroke-linecap="round" />
+
+    <!-- 2. Halo / Círculo Interior de Resonancia Flotante (Profundidad Audiófila) -->
+    <circle cx="50" cy="57" r="14.5" fill="none" stroke="url(#sloneGlow)" stroke-width="2.2" opacity="0.85" />
+
+    <!-- 3. Muesca sutil de fase superior -->
+    <circle cx="50" cy="31" r="2.2" fill="#04060A" />
+
+    <!-- 4. Diéresis de Proporción Áurea (Puntos Circulares Puros, Radio 3.5px) -->
+    <circle cx="42" cy="18" r="3.6" fill="url(#sloneGlow)" />
+    <circle cx="58" cy="18" r="3.6" fill="url(#sloneGlow)" />
+  </g>
+</svg>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SLÖNE · TCL Leanback Model</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
+
+  <style>
+    :root {
+      --bg: #05070B;
+      --card-radius: 14px;
+      --focus-border: #FFE600;
+      --accent-yellow: #FFE600;
+      --dark-blue: #0A0F1D;
+      --text-muted: #8E9CAE;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: #FFFFFF;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Fondo con aura atmosférica superior sutil */
+    .ambient-glow {
+      position: absolute;
+      top: -20%;
+      left: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(10, 15, 29, 0.75) 0%, rgba(5, 7, 11, 0) 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Escenario principal */
+    .launcher-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      padding: 40px 60px 30px;
+    }
+
+    /* ── BARRA SUPERIOR ── */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .clock-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .digital-clock {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      color: #FFFFFF;
+    }
+
+    .date-string {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .ghost-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ghost-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: #FFFFFF;
+    }
+
+    .ghost-btn:focus, .ghost-btn.focused {
+      transform: scale(1.15);
+      background: rgba(255, 230, 0, 0.20);
+      border: 2.5px solid #FFE600;
+      box-shadow: 0 0 16px rgba(255, 230, 0, 0.6);
+    }
+
+    /* ── CUADRÍCULA 5 COLUMNAS ── */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: auto;
+      padding-top: 24px;
+    }
+
+    .app-card {
+      position: relative;
+      height: 122px;
+      border-radius: var(--card-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      outline: none;
+      transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.16s ease, border-color 0.16s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .app-card svg, .app-card img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .app-card .app-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* Estado enfocado TCL */
+    .app-card:focus, .app-card.focused {
+      transform: scale(1.08);
+      border: 2.5px solid var(--focus-border);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.9), 0 0 18px rgba(255, 230, 0, 0.55);
+      z-index: 20;
+    }
+
+    /* ── PIE DE PÁGINA ── */
+    .bottom-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+      padding-top: 12px;
+    }
+
+    /* ── REPRODUCTOR DE VÍDEO COMPLETO ── */
+    #videoOverlay {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000000;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #videoElement {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .video-osd {
+      position: absolute;
+      top: 32px;
+      left: 48px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: fadeIn 0.3s ease;
+      z-index: 1010;
+    }
+
+    .live-badge {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #FFE600;
+      box-shadow: 0 0 8px #FFE600;
+    }
+
+    .osd-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .osd-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <div class="launcher-container" id="mainContainer">
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+      <div class="clock-group">
+        <div class="digital-clock" id="clockText">21:19</div>
+        <div class="date-string" id="dateText">SÁBADO · 24 OCTUBRE</div>
+      </div>
+
+      <div class="top-actions">
+        <button class="ghost-btn" id="btnSliders" tabindex="1" title="Ajustes Rápidos" onclick="showQuickModal()">
+          <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zM13 21v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zM21 13v-2H11v2h10zM17 9h2V7h4V5h-4V3h-2v6z"/></svg>
+        </button>
+        <button class="ghost-btn" id="btnSettings" tabindex="2" title="Ajustes Sistema" onclick="openSystemSettings()">
+          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- CUADRÍCULA 5 COLUMNAS TCL MODEL -->
+    <div class="grid-container" id="appsGrid">
+      
+      <!-- Fila 1 -->
+      <div class="app-card" tabindex="10" data-url="https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8" data-title="SLÖNE ZERÖ · La 1 UHD" style="background:#141924;">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" stroke="#FF4D4D" stroke-width="2.5" fill="none"/><path d="M29 14c-2-2-5-3-9-3-6 0-9 3-9 7s4 7 10 8c5 1 7 3 7 6s-4 5-9 5c-5 0-8-2-10-5l-1-6h3c1 3 4 5 8 5s5-2 5-4-4-6-10-7c-5-1-7-4-7-7s5-7 11-7c5 0 8 2 10 4z" fill="#FF3333"/><rect x="34" y="30" width="10" height="6" rx="2" fill="#FFD700"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">S beta</span>
+      </div>
+
+      <div class="app-card" tabindex="11" data-pkg="ar.tvplayer.tv" style="background:#FFFFFF;">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="#00B4D8"/><path d="M18 16l14 8-14 8z" fill="#FFFFFF"/></svg>
+        <span class="app-title" style="color:#111111;">tivimate</span>
+      </div>
+
+      <div class="app-card" tabindex="12" data-url="https://directes-tv-cat.3catdirectes.cat/live-origin/esport3-hls/master.m3u8" data-title="3Cat Esport3 Directe" style="background:#E02424;">
+        <svg viewBox="0 0 48 48"><path d="M8 10h32L24 40z" fill="#FFFFFF"/><path d="M16 16h16L24 30z" fill="#E02424"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">3cat</span>
+      </div>
+
+      <div class="app-card" tabindex="13" data-pkg="tv.twitch.android.app" style="background:#9146FF;">
+        <svg viewBox="0 0 48 48"><path d="M8 4l-4 8v28h8v4h4l4-4h8l16-16V4zm32 18l-8 8h-8l-4 4v-4H12V8h28z" fill="#FFFFFF"/><rect x="30" y="14" width="4" height="10" fill="#9146FF"/><rect x="22" y="14" width="4" height="10" fill="#9146FF"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">twitch</span>
+      </div>
+
+      <div class="app-card" tabindex="14" data-pkg="com.antena3.atresplayer" style="background:#0D0E13;">
+        <svg viewBox="0 0 48 48"><path d="M24 4L44 40H34L24 20L14 40H4z" fill="#FF2E00"/><path d="M24 14l6 12H18z" fill="#FFAA00"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">atresplayer</span>
+      </div>
+
+      <!-- Fila 2 -->
+      <div class="app-card" tabindex="15" data-pkg="com.disney.disneyplus" style="background:#091632;">
+        <svg viewBox="0 0 48 48"><path d="M8 8c12-6 26-6 36 6-8-6-20-6-30 0z" fill="#113CCF"/><path d="M18 18c8 0 12 4 12 10s-6 10-14 10h-4V18zm-2 4v12c6 0 10-2 10-6s-4-6-10-6z" fill="#FFFFFF"/><path d="M38 20l2 4 4 .5-3 3 1 4-4-3-4 3 1-4-3-3 4-.5z" fill="#00D2FF"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">disney+</span>
+      </div>
+
+      <div class="app-card" tabindex="16" data-pkg="com.rtve.androidtv" style="background:#1A212E;">
+        <svg viewBox="0 0 48 48"><text x="10" y="28" font-size="14" font-weight="900" fill="#FFFFFF" font-family="sans-serif">rtve</text><circle cx="34" cy="24" r="8" fill="#FF6A00"/><path d="M32 20l6 4-6 4z" fill="#FFFFFF"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">rtve play</span>
+      </div>
+
+      <div class="app-card" tabindex="17" data-pkg="com.hbo.hbonow" style="background:#000000;">
+        <svg viewBox="0 0 48 48"><text x="6" y="30" font-size="18" font-weight="900" fill="#FFFFFF" font-family="sans-serif" letter-spacing="1">MAX</text></svg>
+        <span class="app-title" style="color:#FFFFFF;">hbo max</span>
+      </div>
+
+      <div class="app-card" tabindex="18" data-pkg="com.android.vending" style="background:#F7F8FA;">
+        <svg viewBox="0 0 48 48"><path d="M8 6l18 18L8 42z" fill="#00E5FF"/><path d="M26 24L34 16 8 6z" fill="#FFD600"/><path d="M26 24L8 42l26-10z" fill="#FF3D00"/><path d="M26 24l8-8 6 6c2 1 2 3 0 4l-6 6z" fill="#00E676"/></svg>
+        <span class="app-title" style="color:#111111;">google play</span>
+      </div>
+
+      <div class="app-card" tabindex="19" data-pkg="org.videolan.vlc" style="background:#122C50;">
+        <svg viewBox="0 0 48 48"><path d="M24 6L14 36h20z" fill="#FF8800"/><path d="M19 22h10l-2-6h-6z" fill="#FFFFFF"/><path d="M16 30h16l-2-5H18z" fill="#FFFFFF"/><rect x="12" y="36" width="24" height="4" rx="2" fill="#FF8800"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">media player</span>
+      </div>
+
+      <!-- Fila 3 -->
+      <div class="app-card" tabindex="20" data-pkg="com.esaba.downloader" style="background:#FF6A00;">
+        <svg viewBox="0 0 48 48"><path d="M24 6v22l9-9 3 4-12 13-12-13 3-4 9 9V6z" fill="#FFFFFF"/><path d="M6 38h36v4H6z" fill="#FFFFFF"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">downloader</span>
+      </div>
+
+      <div class="app-card" tabindex="21" data-pkg="org.smarttube.stable" style="background:#C70000;">
+        <svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="28" rx="8" fill="#FFFFFF"/><path d="M20 18l12 6-12 6z" fill="#C70000"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">smarttube</span>
+      </div>
+
+      <div class="app-card" tabindex="22" data-url="https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8" data-title="TDT España · La 1 UHD" style="background:#141924;">
+        <svg viewBox="0 0 48 48"><rect x="6" y="8" width="36" height="24" rx="4" fill="none" stroke="#FFFFFF" stroke-width="2.5"/><path d="M18 38h12M24 32v6" stroke="#FFFFFF" stroke-width="2.5"/><circle cx="34" cy="14" r="3" fill="#00FF66"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">tdt españa</span>
+      </div>
+
+      <div class="app-card" tabindex="23" data-url="https://directes-tv-cat.3catdirectes.cat/live-origin/esport3-hls/master.m3u8" data-title="Satélite Europa · Esport3 Directo" style="background:#141924;">
+        <svg viewBox="0 0 48 48"><path d="M24 8a16 16 0 0116 16M24 14a10 10 0 0110 10M12 36l12-12" stroke="#FFFFFF" stroke-width="2.5" fill="none"/><circle cx="12" cy="36" r="4" fill="#00E5FF"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">satélite</span>
+      </div>
+
+      <div class="app-card" tabindex="24" onclick="alert('Catálogo completo disponible')" style="background:#1B2336;">
+        <svg viewBox="0 0 48 48"><rect x="8" y="8" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="20" y="8" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="32" y="8" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="8" y="20" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="20" y="20" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="32" y="20" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="8" y="32" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="20" y="32" width="8" height="8" rx="2" fill="#FFFFFF"/><rect x="32" y="32" width="8" height="8" rx="2" fill="#FFFFFF"/></svg>
+        <span class="app-title" style="color:#FFFFFF;">todas</span>
+      </div>
+
+    </div>
+
+    <!-- PIE DE PÁGINA DISCRETO -->
+    <div class="bottom-status">
+      <span>SLÖNE SOVEREIGN DISPLAY · LEANBACK 1080P60</span>
+      <span id="ipStatus">192.168.1.145 · RELAY ACTIVO</span>
+    </div>
+  </div>
+
+  <!-- REPRODUCTOR DE PANTALLA COMPLETA -->
+  <div id="videoOverlay">
+    <div class="video-osd" id="videoOsd">
+      <div class="live-badge"></div>
+      <div>
+        <div class="osd-title" id="osdTitle">Canal en Directo UHD</div>
+        <div class="osd-sub">Pulsa [ESC] o [ATRÁS] para volver a SLÖNE</div>
+      </div>
+    </div>
+    <video id="videoElement" autoplay playsinline controls></video>
+  </div>
+
+  <script>
+    // ── RELOJ DIGITAL EN TIEMPO REAL EN ESPAÑOL ──
+    const DAYS = ["DOMINGO", "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"];
+    const MONTHS = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clockText').textContent = `${h}:${m}`;
+
+      const dayName = DAYS[now.getDay()];
+      const dayNum = now.getDate();
+      const monthName = MONTHS[now.getMonth()];
+      document.getElementById('dateText').textContent = `${dayName} · ${dayNum} ${monthName}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ── GESTIÓN DE NAVEGACIÓN D-PAD / TECLADO ──
+    const cards = Array.from(document.querySelectorAll('.app-card'));
+    const topBtns = [document.getElementById('btnSliders'), document.getElementById('btnSettings')];
+    let activeIndex = 0; // Foco inicial en la primera tarjeta (S beta)
+
+    cards[0].focus();
+
+    document.addEventListener('keydown', (e) => {
+      const activeEl = document.activeElement;
+      const isCard = cards.includes(activeEl);
+      const isTop = topBtns.includes(activeEl);
+
+      // Si el reproductor de vídeo está abierto, ESC o Backspace cierran el vídeo
+      if (document.getElementById('videoOverlay').style.display === 'flex') {
+        if (e.key === 'Escape' || e.key === 'Backspace' || e.key === 'BrowserBack') {
+          closeVideo();
+          e.preventDefault();
+        }
+        return;
+      }
+
+      if (isCard) {
+        let idx = cards.indexOf(activeEl);
+        if (e.key === 'ArrowRight') {
+          if (idx < cards.length - 1) cards[idx + 1].focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+          if (idx > 0) cards[idx - 1].focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+          if (idx + 5 < cards.length) cards[idx + 5].focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowUp') {
+          if (idx - 5 >= 0) {
+            cards[idx - 5].focus();
+          } else {
+            topBtns[1].focus(); // Subir a ajustes
+          }
+          e.preventDefault();
+        } else if (e.key === 'Enter') {
+          activeEl.click();
+          e.preventDefault();
+        }
+      } else if (isTop) {
+        let idx = topBtns.indexOf(activeEl);
+        if (e.key === 'ArrowLeft') {
+          if (idx > 0) topBtns[idx - 1].focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+          if (idx < topBtns.length - 1) topBtns[idx + 1].focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+          cards[4].focus(); // Bajar a la fila superior
+          e.preventDefault();
+        } else if (e.key === 'Enter') {
+          activeEl.click();
+          e.preventDefault();
+        }
+      }
+    });
+
+    // ── CLICK Y REPRODUCCIÓN ──
+    let hlsInstance = null;
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const url = card.getAttribute('data-url');
+        const title = card.getAttribute('data-title') || card.querySelector('.app-title').textContent;
+        const pkg = card.getAttribute('data-pkg');
+
+        if (url) {
+          playStream(url, title);
+        } else if (pkg) {
+          // Intentar llamada a Android o feedback
+          fetch(`/api/tv/launch_app?pkg=${pkg}`).catch(() => {});
+          console.log(`Lanzando paquete: ${pkg}`);
+        }
+      });
+    });
+
+    function playStream(url, title) {
+      const overlay = document.getElementById('videoOverlay');
+      const video = document.getElementById('videoElement');
+      const osdTitle = document.getElementById('osdTitle');
+
+      osdTitle.textContent = title;
+      overlay.style.display = 'flex';
+
+      if (hlsInstance) {
+        hlsInstance.destroy();
+        hlsInstance = null;
+      }
+
+      if (Hls.isSupported() && url.includes('.m3u8')) {
+        hlsInstance = new Hls({
+          enableWorker: true,
+          lowLatencyMode: true
+        });
+        hlsInstance.loadSource(url);
+        hlsInstance.attachMedia(video);
+        hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(() => {});
+        });
+      } else {
+        video.src = url;
+        video.play().catch(() => {});
+      }
+
+      // Ocultar OSD tras 4 segundos
+      setTimeout(() => {
+        document.getElementById('videoOsd').style.display = 'none';
+      }, 4000);
+    }
+
+    function closeVideo() {
+      const overlay = document.getElementById('videoOverlay');
+      const video = document.getElementById('videoElement');
+      video.pause();
+      video.src = '';
+      if (hlsInstance) {
+        hlsInstance.destroy();
+        hlsInstance = null;
+      }
+      overlay.style.display = 'none';
+      document.getElementById('videoOsd').style.display = 'flex';
+      cards[0].focus();
+    }
+
+    function showQuickModal() {
+      alert("SLÖNE Hub: Emparejamiento QR y Controles Rápidos en http://192.168.1.145:8765/remote");
+    }
+
+    function openSystemSettings() {
+      fetch('/api/tv/settings').catch(() => {});
+    }
+  </script>
+</body>
+</html>

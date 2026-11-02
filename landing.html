@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SLÖNE — Tu pantalla. Tu ley.</title>
+<style>
+:root{--y:#e3ff00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Segoe UI',system-ui}
+.wrap{max-width:980px;margin:0 auto;padding:40px 20px}
+/* HERO */
+.hero{text-align:center;padding:50px 0 30px}
+.hero .logo{font-size:120px;color:var(--y);font-weight:900;line-height:1;text-shadow:0 0 40px rgba(227,255,0,.5);animation:glow 3s infinite}
+@keyframes glow{0%,100%{text-shadow:0 0 30px rgba(227,255,0,.4)}50%{text-shadow:0 0 70px rgba(227,255,0,.8)}}
+.hero .hero-svg{width:190px;height:190px;margin:6px auto 0;color:var(--y);filter:drop-shadow(0 0 26px rgba(227,255,0,.55));animation:glowSvg 3s ease-in-out infinite}
+@keyframes glowSvg{0%,100%{filter:drop-shadow(0 0 18px rgba(227,255,0,.35))}50%{filter:drop-shadow(0 0 46px rgba(227,255,0,.8))}}
+.hero h1{font-size:44px;margin:10px 0;letter-spacing:2px}
+.hero .slogan{color:var(--y);font-size:20px;font-weight:800;letter-spacing:3px}
+.hero .sub{color:#999;margin-top:14px;font-size:15px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6}
+.cta{display:inline-block;margin-top:26px;background:var(--y);color:#000;font-weight:900;font-size:17px;padding:16px 38px;border-radius:12px;text-decoration:none;letter-spacing:1px}
+.contador{margin-top:14px;color:#ccc;font-size:13px}
+.contador b{color:var(--y);font-size:18px}
+/* SLOGANS */
+.slogans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:40px 0}
+.sl{background:#0c0c0c;border:1px solid #222;border-left:4px solid var(--y);padding:14px 16px;border-radius:8px;font-size:14px;color:#ddd}
+/* TARJETA NEGRA Ö — la sorpresa */
+.card-sec{text-align:center;margin:46px 0}
+.card-sec h2{color:var(--y);letter-spacing:1px;margin-bottom:6px}
+.card-sec p{color:#999;font-size:13px;margin-bottom:22px}
+.tarjeta{width:360px;height:220px;margin:0 auto;border-radius:16px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#0d0d0d 0%,#1a1a1a 50%,#0d0d0d 100%);
+  border:1px solid #333;box-shadow:0 20px 50px rgba(0,0,0,.8),inset 0 0 0 1px rgba(227,255,0,.15);
+  transform:perspective(900px) rotateY(-8deg);transition:transform .5s}
+.tarjeta:hover{transform:perspective(900px) rotateY(0)}
+.tarjeta::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(227,255,0,.08) 50%,transparent 70%);background-size:200% 200%;animation:brillo 4s linear infinite}
+@keyframes brillo{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.t-in{position:relative;padding:22px;height:100%;display:flex;flex-direction:column}
+.t-top{display:flex;justify-content:space-between;align-items:center}
+.t-oh{font-size:44px;color:var(--y);font-weight:900}
+.t-num{color:#888;font-size:12px;letter-spacing:2px}
+.t-marca{font-size:17px;font-weight:900;color:var(--y);letter-spacing:4px;margin-top:auto}
+.t-nombre{color:#bbb;font-size:11px;letter-spacing:3px}
+.t-chip{width:36px;height:26px;border-radius:5px;background:linear-gradient(135deg,#f5d76e,#e3ff00);margin-left:auto;opacity:.9}
+/* OFERTAS */
+.ofertas{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:34px 0}
+.of{background:#0c0c0c;border:1px solid #222;border-radius:12px;padding:20px;text-align:center}
+.of h3{color:var(--y);margin-bottom:8px}
+.of .precio{font-size:26px;font-weight:900;margin:8px 0}
+.of ul{list-style:none;color:#bbb;font-size:13px;line-height:1.8}
+.of.destacada{border-color:var(--y);box-shadow:0 0 30px rgba(227,255,0,.15)}
+footer{text-align:center;color:#555;font-size:11px;margin-top:40px;padding:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <svg class="hero-svg" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M 218.24,44.42 L 222.25,44.71 L 226.05,45.35 L 229.63,46.35 L 233.00,47.71 L 236.15,49.43 L 238.88,51.15 L 241.17,52.87 L 243.03,54.59 L 244.46,56.31 L 245.47,58.68 L 246.04,61.69 L 246.18,65.34 L 245.90,69.64 L 245.11,73.29 L 243.82,76.30 L 242.03,78.67 L 239.74,80.39 L 235.51,82.46 L 229.35,84.90 L 221.25,87.69 L 211.22,90.85 L 202.48,93.07 L 195.03,94.36 L 188.86,94.72 L 183.99,94.14 L 179.41,93.00 L 175.11,91.28 L 171.10,88.98 L 167.37,86.12 L 164.50,83.04 L 162.50,79.74 L 161.35,76.23 L 161.06,72.51 L 161.21,69.21 L 161.78,66.34 L 162.78,63.91 L 164.22,61.90 L 168.16,59.54 L 174.61,56.81 L 183.56,53.73 L 195.03,50.29 L 203.62,47.64 L 209.36,45.78 L 212.22,44.71 L 212.22,44.42 L 213.23,44.28 L 215.23,44.28 Z" fill="currentColor"/>
+<path d="M 98.30,79.96 L 102.60,80.24 L 106.75,80.89 L 110.77,81.89 L 114.64,83.25 L 118.36,84.97 L 121.59,86.98 L 124.31,89.27 L 126.53,91.85 L 128.25,94.72 L 129.47,97.65 L 130.18,100.66 L 130.40,103.74 L 130.11,106.90 L 129.32,109.76 L 128.03,112.34 L 126.24,114.64 L 123.95,116.64 L 119.79,118.93 L 113.78,121.51 L 105.89,124.38 L 96.15,127.53 L 87.91,129.97 L 81.17,131.69 L 75.94,132.69 L 72.22,132.98 L 68.42,132.83 L 64.55,132.26 L 60.61,131.26 L 56.60,129.82 L 53.09,128.11 L 50.08,126.10 L 47.57,123.81 L 45.56,121.23 L 43.99,118.65 L 42.84,116.07 L 42.13,113.49 L 41.84,110.91 L 41.77,108.62 L 41.91,106.61 L 42.27,104.89 L 42.84,103.46 L 43.85,101.81 L 45.28,99.95 L 47.14,97.87 L 49.43,95.58 L 53.59,93.14 L 59.61,90.56 L 67.49,87.84 L 77.23,84.97 L 84.54,82.75 L 89.41,81.17 L 91.85,80.24 L 91.85,79.96 L 92.93,79.81 L 95.07,79.81 Z" fill="currentColor"/>
+<path d="M 238.45,110.48 L 249.05,110.48 L 259.65,110.91 L 270.26,111.77 L 280.86,113.06 L 291.47,114.78 L 301.50,116.71 L 310.96,118.86 L 319.84,121.23 L 328.15,123.81 L 336.39,126.67 L 344.56,129.82 L 352.66,133.26 L 360.68,136.99 L 368.85,141.29 L 377.16,146.16 L 385.61,151.61 L 394.21,157.63 L 401.88,163.29 L 408.61,168.59 L 414.42,173.53 L 419.29,178.12 L 423.80,182.56 L 427.96,186.86 L 431.76,191.01 L 435.20,195.03 L 437.63,199.11 L 439.06,203.27 L 439.49,207.49 L 438.92,211.79 L 438.99,215.37 L 439.71,218.24 L 441.07,220.39 L 443.08,221.82 L 445.01,222.97 L 446.87,223.83 L 448.67,224.40 L 450.39,224.69 L 452.46,226.19 L 454.90,228.92 L 457.69,232.86 L 460.85,238.02 L 463.71,243.89 L 466.29,250.48 L 468.58,257.79 L 470.59,265.82 L 472.10,274.13 L 473.10,282.73 L 473.60,291.61 L 473.60,300.78 L 473.24,309.38 L 472.53,317.40 L 471.45,324.86 L 470.02,331.73 L 468.37,338.25 L 466.51,344.42 L 464.43,350.22 L 462.14,355.66 L 459.13,361.68 L 455.40,368.28 L 450.96,375.44 L 445.80,383.18 L 440.50,390.41 L 435.05,397.15 L 429.46,403.38 L 423.73,409.12 L 417.07,414.99 L 409.47,421.01 L 400.95,427.17 L 391.49,433.48 L 383.82,438.28 L 377.95,441.57 L 373.86,443.36 L 371.57,443.65 L 369.42,443.58 L 367.42,443.15 L 365.55,442.36 L 363.83,441.21 L 361.90,440.43 L 359.75,440.00 L 357.38,439.92 L 354.80,440.21 L 352.58,440.71 L 350.72,441.43 L 349.22,442.36 L 348.07,443.51 L 347.21,444.94 L 346.64,446.66 L 346.35,448.67 L 346.35,450.96 L 346.21,452.82 L 345.92,454.25 L 345.49,455.26 L 344.92,455.83 L 341.48,456.91 L 335.17,458.48 L 326.00,460.56 L 313.96,463.14 L 302.07,465.15 L 290.32,466.58 L 278.71,467.44 L 267.25,467.72 L 255.71,467.51 L 244.11,466.79 L 232.43,465.58 L 220.68,463.86 L 211.79,462.42 L 205.77,461.28 L 202.62,460.42 L 202.33,459.84 L 200.40,458.98 L 196.82,457.84 L 191.59,456.40 L 184.71,454.68 L 176.90,452.11 L 168.16,448.67 L 158.48,444.37 L 147.88,439.21 L 137.35,433.33 L 126.89,426.74 L 116.50,419.43 L 106.18,411.41 L 96.65,403.17 L 87.91,394.71 L 79.96,386.04 L 72.79,377.16 L 67.42,370.14 L 63.84,364.98 L 62.04,361.68 L 62.04,360.25 L 62.33,358.96 L 62.90,357.81 L 63.76,356.81 L 64.91,355.95 L 65.77,354.73 L 66.34,353.16 L 66.63,351.22 L 66.63,348.93 L 66.20,346.85 L 65.34,344.99 L 64.05,343.34 L 62.33,341.91 L 60.40,340.76 L 58.25,339.90 L 55.88,339.33 L 53.30,339.04 L 50.72,336.61 L 48.14,332.02 L 45.56,325.29 L 42.99,316.40 L 40.98,307.30 L 39.55,297.99 L 38.69,288.46 L 38.40,278.71 L 38.90,268.61 L 40.19,258.15 L 42.27,247.33 L 45.14,236.15 L 48.57,225.62 L 52.59,215.73 L 57.17,206.49 L 62.33,197.89 L 68.13,189.51 L 74.58,181.34 L 81.68,173.39 L 89.41,165.65 L 98.01,158.20 L 107.47,151.03 L 117.79,144.15 L 128.97,137.56 L 139.00,132.69 L 147.88,129.54 L 155.62,128.11 L 162.21,128.39 L 167.51,128.25 L 171.53,127.68 L 174.25,126.67 L 175.68,125.24 L 176.83,123.73 L 177.69,122.16 L 178.26,120.51 L 178.55,118.79 L 179.98,117.21 L 182.56,115.78 L 186.28,114.49 L 191.16,113.35 L 196.32,112.49 L 201.76,111.91 L 207.49,111.63 L 213.51,111.63 L 218.03,111.55 L 221.03,111.41 L 222.54,111.20 L 222.54,110.91 L 225.19,110.69 L 230.49,110.55 Z M 240.02,134.55 L 250.91,134.55 L 260.87,134.84 L 269.90,135.41 L 278.00,136.27 L 285.16,137.42 L 291.25,138.49 L 296.27,139.50 L 300.21,140.43 L 303.07,141.29 L 305.37,142.29 L 307.09,143.44 L 308.23,144.73 L 308.81,146.16 L 309.52,147.09 L 310.38,147.52 L 311.39,147.45 L 312.53,146.88 L 314.18,146.59 L 316.33,146.59 L 318.98,146.88 L 322.13,147.45 L 324.71,148.38 L 326.72,149.67 L 328.15,151.32 L 329.01,153.33 L 329.23,154.97 L 328.80,156.26 L 327.72,157.20 L 326.00,157.77 L 324.14,157.98 L 322.13,157.84 L 319.98,157.34 L 317.69,156.48 L 315.76,155.48 L 314.18,154.33 L 312.96,153.04 L 312.10,151.61 L 310.96,150.68 L 309.52,150.25 L 307.80,150.32 L 305.80,150.89 L 302.07,150.82 L 296.63,150.10 L 289.46,148.74 L 280.58,146.73 L 270.40,145.23 L 258.94,144.23 L 246.18,143.72 L 232.14,143.72 L 219.32,144.37 L 207.71,145.66 L 197.32,147.59 L 188.15,150.17 L 178.90,153.40 L 169.59,157.27 L 160.20,161.78 L 150.75,166.94 L 142.08,172.24 L 134.20,177.69 L 127.10,183.28 L 120.80,189.01 L 115.57,194.09 L 111.41,198.54 L 108.33,202.33 L 106.32,205.49 L 104.46,207.92 L 102.74,209.64 L 101.17,210.65 L 99.73,210.93 L 98.73,211.58 L 98.16,212.58 L 98.01,213.94 L 98.30,215.66 L 98.30,217.38 L 98.01,219.10 L 97.44,220.82 L 96.58,222.54 L 95.50,224.04 L 94.22,225.33 L 92.71,226.41 L 90.99,227.27 L 89.77,228.41 L 89.06,229.85 L 88.84,231.57 L 89.13,233.57 L 88.91,236.65 L 88.20,240.81 L 86.98,246.04 L 85.26,252.35 L 83.97,259.08 L 83.11,266.25 L 82.68,273.84 L 82.68,281.87 L 82.89,288.89 L 83.32,294.91 L 83.97,299.92 L 84.83,303.93 L 85.76,307.80 L 86.76,311.53 L 87.84,315.11 L 88.98,318.55 L 90.78,322.85 L 93.21,328.01 L 96.29,334.03 L 100.02,340.90 L 103.53,347.00 L 106.83,352.30 L 109.91,356.81 L 112.77,360.54 L 116.50,364.76 L 121.08,369.49 L 126.53,374.72 L 132.83,380.46 L 139.00,385.69 L 145.01,390.41 L 150.89,394.64 L 156.62,398.37 L 163.21,402.09 L 170.67,405.82 L 178.98,409.55 L 188.15,413.27 L 195.17,416.42 L 200.04,419.00 L 202.76,421.01 L 203.34,422.44 L 203.34,423.66 L 202.76,424.66 L 201.62,425.45 L 199.90,426.02 L 197.39,426.02 L 194.09,425.45 L 190.01,424.31 L 185.14,422.59 L 179.26,420.08 L 172.38,416.78 L 164.50,412.70 L 155.62,407.83 L 147.95,403.38 L 141.50,399.37 L 136.27,395.79 L 132.26,392.64 L 127.68,388.62 L 122.52,383.75 L 116.78,378.02 L 110.48,371.43 L 104.82,364.98 L 99.80,358.67 L 95.43,352.51 L 91.71,346.49 L 88.34,340.47 L 85.33,334.46 L 82.68,328.44 L 80.39,322.42 L 78.38,316.62 L 76.66,311.03 L 75.23,305.65 L 74.08,300.49 L 73.22,294.76 L 72.65,288.46 L 72.36,281.58 L 72.36,274.13 L 72.79,266.75 L 73.65,259.44 L 74.94,252.20 L 76.66,245.04 L 78.38,239.31 L 80.10,235.01 L 81.82,232.14 L 83.54,230.71 L 84.76,229.13 L 85.47,227.41 L 85.69,225.55 L 85.40,223.54 L 85.33,221.75 L 85.47,220.18 L 85.83,218.81 L 86.41,217.67 L 87.34,216.52 L 88.63,215.37 L 90.27,214.23 L 92.28,213.08 L 93.79,211.79 L 94.79,210.36 L 95.29,208.78 L 95.29,207.06 L 95.50,205.42 L 95.93,203.84 L 96.58,202.33 L 97.44,200.90 L 99.37,198.47 L 102.38,195.03 L 106.47,190.58 L 111.63,185.14 L 116.78,180.12 L 121.94,175.54 L 127.10,171.38 L 132.26,167.66 L 138.21,163.86 L 144.94,159.99 L 152.47,156.05 L 160.78,152.04 L 168.73,148.53 L 176.33,145.52 L 183.56,143.01 L 190.44,141.00 L 197.03,139.35 L 203.34,138.06 L 209.36,137.13 L 215.09,136.56 L 219.39,136.06 L 222.25,135.63 L 223.69,135.27 L 223.69,134.98 L 226.41,134.77 L 231.85,134.63 Z M 345.06,157.91 L 351.08,160.49 L 357.38,163.72 L 363.98,167.58 L 370.85,172.10 L 378.02,177.26 L 385.04,182.99 L 391.92,189.29 L 398.65,196.17 L 405.25,203.62 L 411.12,210.86 L 416.28,217.88 L 420.72,224.69 L 424.45,231.28 L 427.89,238.52 L 431.04,246.40 L 433.91,254.93 L 436.49,264.10 L 438.42,272.91 L 439.71,281.36 L 440.35,289.46 L 440.35,297.20 L 440.21,303.58 L 439.92,308.59 L 439.49,312.24 L 438.92,314.54 L 438.21,316.40 L 437.35,317.83 L 436.34,318.84 L 435.20,319.41 L 434.48,320.41 L 434.19,321.85 L 434.34,323.71 L 434.91,326.00 L 435.20,328.15 L 435.20,330.16 L 434.91,332.02 L 434.34,333.74 L 433.55,335.24 L 432.54,336.53 L 431.33,337.61 L 429.89,338.47 L 428.89,339.54 L 428.32,340.83 L 428.17,342.34 L 428.46,344.06 L 427.60,347.07 L 425.59,351.37 L 422.44,356.95 L 418.14,363.83 L 413.63,370.28 L 408.90,376.30 L 403.96,381.89 L 398.80,387.05 L 393.14,392.13 L 386.98,397.15 L 380.31,402.09 L 373.15,406.97 L 366.13,411.34 L 359.25,415.21 L 352.51,418.57 L 345.92,421.44 L 338.76,424.16 L 331.02,426.74 L 322.71,429.18 L 313.82,431.47 L 305.72,433.33 L 298.42,434.77 L 291.90,435.77 L 286.16,436.34 L 279.50,436.70 L 271.91,436.84 L 263.38,436.77 L 253.92,436.49 L 244.82,435.84 L 236.08,434.84 L 227.70,433.48 L 219.67,431.76 L 213.51,430.18 L 209.21,428.75 L 206.78,427.46 L 206.20,426.31 L 205.99,425.31 L 206.13,424.45 L 206.63,423.73 L 207.49,423.16 L 210.57,423.09 L 215.88,423.52 L 223.40,424.45 L 233.14,425.88 L 242.74,426.96 L 252.20,427.67 L 261.52,428.03 L 270.69,428.03 L 279.64,427.67 L 288.39,426.96 L 296.91,425.88 L 305.22,424.45 L 312.75,422.94 L 319.48,421.37 L 325.43,419.72 L 330.59,418.00 L 336.39,415.71 L 342.84,412.84 L 349.93,409.40 L 357.67,405.39 L 364.91,401.23 L 371.64,396.93 L 377.88,392.49 L 383.61,387.91 L 388.91,383.32 L 393.78,378.74 L 398.22,374.15 L 402.24,369.56 L 405.89,364.91 L 409.19,360.18 L 412.12,355.38 L 414.70,350.51 L 417.00,346.64 L 419.00,343.77 L 420.72,341.91 L 422.16,341.05 L 423.16,339.90 L 423.73,338.47 L 423.88,336.75 L 423.59,334.74 L 423.52,332.81 L 423.66,330.95 L 424.02,329.15 L 424.59,327.43 L 425.38,325.93 L 426.38,324.64 L 427.60,323.57 L 429.03,322.71 L 429.97,321.77 L 430.40,320.77 L 430.32,319.70 L 429.75,318.55 L 429.46,316.04 L 429.46,312.17 L 429.75,306.94 L 430.32,300.35 L 430.61,294.05 L 430.61,288.03 L 430.32,282.30 L 429.75,276.85 L 428.89,271.33 L 427.74,265.74 L 426.31,260.08 L 424.59,254.35 L 421.80,247.76 L 417.93,240.31 L 412.98,232.00 L 406.97,222.83 L 400.66,214.30 L 394.07,206.42 L 387.19,199.18 L 380.03,192.59 L 373.36,186.79 L 367.20,181.77 L 361.54,177.54 L 356.38,174.10 L 351.65,171.17 L 347.35,168.73 L 343.48,166.80 L 340.05,165.36 L 337.25,163.86 L 335.10,162.28 L 333.60,160.63 L 332.74,158.91 L 332.38,157.55 L 332.52,156.55 L 333.17,155.91 L 334.31,155.62 L 335.17,155.33 L 335.75,155.05 L 336.03,154.76 L 336.03,154.47 L 337.54,154.90 L 340.55,156.05 Z M 253.92,172.53 L 265.67,173.39 L 276.13,174.53 L 285.30,175.97 L 293.19,177.69 L 299.78,179.69 L 306.08,181.84 L 312.10,184.14 L 317.83,186.57 L 323.28,189.15 L 328.37,191.73 L 333.10,194.31 L 337.47,196.89 L 341.48,199.47 L 345.63,202.48 L 349.93,205.92 L 354.37,209.79 L 358.96,214.08 L 363.62,219.24 L 368.35,225.26 L 373.15,232.14 L 378.02,239.88 L 382.10,247.26 L 385.40,254.28 L 387.91,260.94 L 389.63,267.25 L 390.92,273.48 L 391.78,279.64 L 392.21,285.73 L 392.21,291.75 L 391.92,297.49 L 391.35,302.93 L 390.49,308.09 L 389.34,312.96 L 387.91,317.76 L 386.19,322.49 L 384.18,327.15 L 381.89,331.73 L 379.38,336.18 L 376.66,340.47 L 373.72,344.63 L 370.57,348.64 L 367.42,352.37 L 364.26,355.81 L 361.11,358.96 L 357.96,361.83 L 354.02,364.91 L 349.29,368.20 L 343.77,371.71 L 337.47,375.44 L 329.87,379.02 L 320.99,382.46 L 310.81,385.76 L 299.35,388.91 L 288.53,391.35 L 278.35,393.07 L 268.83,394.07 L 259.94,394.36 L 251.41,394.14 L 243.25,393.42 L 235.44,392.21 L 227.98,390.49 L 220.75,388.62 L 213.73,386.62 L 206.92,384.47 L 200.33,382.18 L 194.38,379.88 L 189.08,377.59 L 184.42,375.30 L 180.41,373.00 L 177.04,370.85 L 174.32,368.85 L 172.24,366.99 L 170.81,365.27 L 169.30,363.83 L 167.73,362.69 L 166.08,361.83 L 164.36,361.25 L 161.21,358.53 L 156.62,353.66 L 150.60,346.64 L 143.15,337.47 L 136.99,329.08 L 132.12,321.49 L 128.54,314.68 L 126.24,308.66 L 124.38,302.29 L 122.95,295.55 L 121.94,288.46 L 121.37,281.01 L 121.23,273.91 L 121.51,267.18 L 122.23,260.80 L 123.38,254.78 L 125.10,248.69 L 127.39,242.53 L 130.25,236.30 L 133.69,229.99 L 137.35,224.12 L 141.22,218.67 L 145.30,213.66 L 149.60,209.07 L 154.69,204.48 L 160.56,199.90 L 167.23,195.31 L 174.68,190.73 L 181.70,186.79 L 188.29,183.49 L 194.45,180.84 L 200.18,178.83 L 206.20,177.11 L 212.51,175.68 L 219.10,174.53 L 225.98,173.67 L 231.14,172.96 L 234.58,172.38 L 236.30,171.95 L 236.30,171.67 L 239.23,171.67 L 245.11,171.95 Z" fill="currentColor"/></svg>
+    <h1>SLÖNE</h1>
+    <div class="slogan">TU PANTALLA. TU LEY.</div>
+    <p class="sub">La señal que nunca se arrodilla. Cero anuncios. Cero cortes. Cero rastreo. Solo tú y tu emisión, al milisegundo, en cualquier pantalla del planeta.</p>
+    <a class="cta" id="cta" href="mailto:contacto@slone.tv?subject=Quiero%20mi%20%C3%96%20de%20Pionero&body=Nombre:%0ATel%C3%A9fono:%0ACanal%20preferido:%0A" >RESERVAR MI Ö — PLAZAS LIMITADAS</a>
+    <div class="contador">Quedan <b id="plazas">487</b> de <b>500</b> plazas de Fundador · <span id="plazas-msg">Nº grabado en tu Tarjeta Negra al reservar</span></div>
+  </div>
+
+  <div class="slogans">
+    <div class="sl">"Tu pantalla. Tu ley."</div>
+    <div class="sl">"Cero anuncios. Cero cortes. Cero excusas."</div>
+    <div class="sl">"Ellos venden tus ojos. SLÖNE te los devuelve."</div>
+    <div class="sl">"Soberano de tu sofá."</div>
+    <div class="sl">"La Ö lo ve todo. Tú lo controlas todo."</div>
+    <div class="sl">"Paga una vez. Reina siempre."</div>
+    <div class="sl">"Donde la emisión late al milisegundo."</div>
+    <div class="sl">"No es otra app. Es tu independencia."</div>
+    <div class="sl">"SLÖNE: el último canal que necesitarás."</div>
+    <div class="sl">"La señal que nunca se arrodilla."</div>
+  </div>
+
+  <div class="card-sec">
+    <h2>🖤 LA TARJETA NEGRA Ö</h2>
+    <p>Solo 500. Acero real, grabada a láser, numerada. Tu nombre en los créditos como Fundador.</p>
+    <div class="tarjeta">
+      <div class="t-in">
+        <div class="t-top">
+          <div class="t-oh">Ö</div>
+          <div class="t-num">001 / 500</div>
+        </div>
+        <div class="t-chip"></div>
+        <div class="t-marca">SLÖNE</div>
+        <div class="t-nombre">FUNDADOR SOVEREIGN · MIEMBRO VITALICIO</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ofertas">
+    <div class="of destacada">
+      <h3>👑 PIONERO Ö</h3>
+      <div class="precio">149€</div>
+      <ul><li>Acceso vitalicio</li><li>Tarjeta Negra de acero</li><li>Tu nombre en los créditos</li><li>Canal privado del fundador</li></ul>
+    </div>
+    <div class="of">
+      <h3>⚽ PASS SPORTS</h3>
+      <div class="precio">3,99€/mes</div>
+      <ul><li>4K 60fps</li><li>Multiview Stadium 4X</li><li>FanAudio sincronizado</li></ul>
+    </div>
+    <div class="of">
+      <h3>🌍 SLÖNE ONE</h3>
+      <div class="precio">59,99€/año</div>
+      <ul><li>Todo el ecosistema</li><li>5 pantallas a la vez</li><li>Sin límites</li></ul>
+    </div>
+  </div>
+
+  <footer>SLÖNE CORP · La Ö es una marca original del fundador · © 2026 · contacto@slone.tv</footer>
+</div>
+<script>
+// Contador de plazas de Pionero Ö (persistente en este navegador)
+(function () {
+  var TOTAL = 500;
+  var START = 487;            // semilla oficial de captación
+  var KEY = "slone_plazas_restantes";
+  var resta = parseInt(localStorage.getItem(KEY), 10);
+  if (isNaN(resta) || resta < 0 || resta > START) resta = START;
+  var el = document.getElementById("plazas");
+  var msg = document.getElementById("plazas-msg");
+  var cta = document.getElementById("cta");
+  var numero = function (n) { return String(TOTAL - n).padStart(3, "0"); };
+  var pintar = function () {
+    el.textContent = resta;
+    if (resta <= 0) {
+      msg.textContent = "Lista de espera abierta · siguientes Ö con nº de espera";
+      cta.textContent = "UNIRME A LA LISTA DE ESPERA";
+      document.querySelector(".t-num").textContent = "LISTA / " + TOTAL;
+      return;
+    }
+    document.querySelector(".t-num").textContent = numero(resta + 1) + " / " + TOTAL;
+  };
+  cta.addEventListener("click", function () {
+    if (resta > 0) resta -= 1;
+    localStorage.setItem(KEY, String(resta));
+    pintar();
+  });
+  pintar();
+})();
+</script>
+</body>
+</html>

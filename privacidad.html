@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidad — SLÖNE</title>
+<style>
+:root{--y:#e3ff00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#e8e8e8;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.65}
+.wrap{max-width:820px;margin:0 auto;padding:48px 22px 60px}
+header{border-bottom:1px solid #222;padding-bottom:22px;margin-bottom:30px}
+header .marca{color:var(--y);font-weight:900;font-size:30px;letter-spacing:2px}
+header .fecha{color:#777;font-size:13px;margin-top:6px}
+h2{color:var(--y);font-size:19px;margin:30px 0 10px;letter-spacing:.5px}
+p{margin:8px 0;font-size:15px;color:#ddd}
+ul{margin:8px 0 8px 22px}
+li{margin:6px 0;font-size:15px;color:#ddd}
+code{background:#111;border:1px solid #2a2a2a;border-radius:5px;padding:1px 7px;color:var(--y);font-size:14px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid #222;color:#666;font-size:13px}
+footer b{color:var(--y)}
+a{color:var(--y)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="marca">SLÖNE</div>
+  <div class="fecha">Política de Privacidad · Última actualización: noviembre de 2026</div>
+</header>
+
+<h2>1. Quiénes somos</h2>
+<p>SLÖNE es un reproductor de IPTV/TV soberano, disponible como launcher para Android TV y como aplicación para Linux. La privacidad es un principio de diseño: la aplicación funciona <b>sin cuentas, sin registro y sin recogida de datos personales</b>.</p>
+
+<h2>2. Qué datos NO recogemos</h2>
+<ul>
+  <li><b>No recogemos datos personales</b> de ningún tipo (nombre, correo, ubicación, hábitos de uso).</li>
+  <li><b>No requerimos registro</b> ni creación de cuenta propia.</li>
+  <li><b>Cero telemetría externa:</b> no se envía ninguna información a servidores de SLÖNE.</li>
+  <li><b>No compartimos ni vendemos datos con terceros</b>, bajo ninguna circunstancia.</li>
+</ul>
+
+<h2>3. Qué se guarda localmente</h2>
+<p>Toda la información que gestiona SLÖNE se almacena exclusivamente en el dispositivo del usuario:</p>
+<ul>
+  <li><b>Tu lista M3U o credenciales Xtream</b> (de tu propio proveedor IPTV), guardadas solo localmente en el perfil de configuración de la aplicación (<code>~/.config/slocast/</code> en Linux; almacenamiento privado de la app en Android).</li>
+  <li><b>Ajustes de la aplicación</b> (modo de buffer, temas, preferencias).</li>
+</ul>
+<p>Nada de lo anterior sale del dispositivo ni se sincroniza con servidores de SLÖNE.</p>
+
+<h2>4. Conexiones de red</h2>
+<p>SLÖNE establece conexiones únicamente para prestar sus funciones:</p>
+<ul>
+  <li><b>Servidores de tu proveedor IPTV:</b> para reproducir los canales que solicites.</li>
+  <li><b>Servicios públicos de geolocalización de IP</b> (<code>ipwho.is</code>, <code>ipapi.co</code>, <code>ipify</code>): únicamente para mostrar el indicador VPN (país de salida de la conexión). La consulta no va asociada a ningún identificador del usuario.</li>
+  <li><b>API de DeepSeek:</b> solo si el usuario configura voluntariamente su propia clave API, para funciones opcionales de metadatos y resumen con IA. Las peticiones se realizan directamente desde el dispositivo con la clave del usuario.</li>
+</ul>
+
+<h2>5. Permisos (Android)</h2>
+<ul>
+  <li><b>INTERNET</b> y <b>ACCESS_NETWORK_STATE:</b> necesarios para reproducir contenido y comprobar la conectividad.</li>
+  <li><b>QUERY_ALL_PACKAGES:</b> necesario para listar las aplicaciones instaladas y mostrarlas en el launcher. Esa información no se recoge ni se transmite.</li>
+</ul>
+
+<h2>6. Seguridad</h2>
+<p>Tus credenciales se guardan únicamente en el almacenamiento privado de la aplicación, en tu propio dispositivo. Te recomendamos proteger el dispositivo y no compartir tus credenciales con terceros.</p>
+
+<h2>7. Contacto</h2>
+<p>Para cualquier duda sobre esta política: <a href="mailto:contacto@slone.tv">contacto@slone.tv</a></p>
+
+<h2>8. Cambios en esta política</h2>
+<p>Si esta política cambia, actualizaremos este documento y la fecha de su última revisión. Los cambios entrarán en vigor en el momento de su publicación.</p>
+
+<footer>SLÖNE CORP · <b>La Ö</b> · contacto@slone.tv · © 2026</footer>
+</div>
+</body>
+</html>

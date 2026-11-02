@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="neonV3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="25%" stop-color="#E3FF00"/>
+      <stop offset="100%" stop-color="#A2DE00"/>
+    </linearGradient>
+
+    <filter id="glowV3" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="600" height="600" fill="#000000"/>
+
+  <g filter="url(#glowV3)">
+    <!-- 1. ANILLO PRINCIPAL SÓLIDO (R_ext=170, R_int=105) -->
+    <!-- Muesca superior elegante -->
+    <mask id="maskV3">
+      <rect width="600" height="600" fill="#FFFFFF"/>
+      <circle cx="300" cy="340" r="105" fill="#000000"/>
+      <!-- Muesca semicircular en ápice (R=9) -->
+      <circle cx="300" cy="170" r="9" fill="#000000"/>
+    </mask>
+
+    <circle cx="300" cy="340" r="170" fill="url(#neonV3)" mask="url(#maskV3)"/>
+
+    <!-- 2. ANILLO CONCÉNTRICO FLOTANTE INTERIOR (HALO DE RESONANCIA: R=68, GROSOR=6px) -->
+    <!-- Este anillo interior flotante en el espacio hueco crea una profundidad visual de alta fidelidad -->
+    <circle cx="300" cy="340" r="68" fill="none" stroke="url(#neonV3)" stroke-width="7"/>
+
+    <!-- 3. PUNTOS CIRCULARES PUROS PROPORCIONADOS (RADIO 14px, DIÁMETRO 28px) -->
+    <circle cx="265" cy="126" r="14" fill="url(#neonV3)"/>
+    <circle cx="335" cy="126" r="14" fill="url(#neonV3)"/>
+  </g>
+
+  <!-- LÍNEAS TÉCNICAS SUTILES -->
+  <g stroke="#162232" stroke-width="1" stroke-dasharray="2,3" opacity="0.5">
+    <line x1="300" y1="50" x2="300" y2="550"/>
+    <circle cx="300" cy="340" r="68" fill="none" stroke="#00F0FF" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.4"/>
+  </g>
+</svg>

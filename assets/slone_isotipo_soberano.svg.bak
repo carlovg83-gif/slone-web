@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente de Oro Nórdico Satinado con Iluminación Cenital a 135° -->
+    <linearGradient id="sloneGoldMaster" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0%" stop-color="#FFF9D2" />
+      <stop offset="30%" stop-color="#FFDF00" />
+      <stop offset="70%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#996515" />
+    </linearGradient>
+
+    <!-- Gradiente de Titanio Cepillado para Contraste Puro -->
+    <linearGradient id="sloneTitaniumMaster" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+
+    <!-- Filtro de Difusión Óptica de Alta Gama -->
+    <filter id="opticalDiffusion" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="7" result="glow" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0   0 1 0 0 0   0 0 1 0 0  0 0 0 0.25 0" result="glowAlpha"/>
+      <feMerge>
+        <feMergeNode in="glowAlpha" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ==============================================================================
+       ANILLO PRINCIPAL: ÓRBITA SOBERANA
+       Modulación óptica suiza: Radio 142px, grosor de trazo 24px con compensación visual
+       ============================================================================== -->
+  <circle cx="250" cy="280" r="142" 
+          fill="none" 
+          stroke="url(#sloneGoldMaster)" 
+          stroke-width="25" 
+          stroke-linecap="round"
+          filter="url(#opticalDiffusion)" />
+
+  <!-- AURA DE ENLACE DE FASE (Círculo interior sutil de sincronía) -->
+  <circle cx="250" cy="280" r="116" 
+          fill="none" 
+          stroke="rgba(255, 215, 0, 0.08)" 
+          stroke-width="1.5" />
+
+  <!-- ==============================================================================
+       POLOS DE SINCRONIZACIÓN TEMPORAL (LA DIÉRESIS DE FASE)
+       Diámetro 42px (proporción armónica 1:Phi^3 respecto a la órbita)
+       Separación focal exacta: 112px
+       ============================================================================== -->
+  <!-- Polo Alfa (Transmisión Vídeo 4K / Nodo Emisor) -->
+  <circle cx="194" cy="78" r="21" 
+          fill="url(#sloneGoldMaster)" 
+          filter="url(#opticalDiffusion)" />
+  <circle cx="194" cy="78" r="7" 
+          fill="#FFFFFF" opacity="0.6" />
+
+  <!-- Polo Beta (Transmisión Audio Sync / Nodo Receptor) -->
+  <circle cx="306" cy="78" r="21" 
+          fill="url(#sloneGoldMaster)" 
+          filter="url(#opticalDiffusion)" />
+  <circle cx="306" cy="78" r="7" 
+          fill="#FFFFFF" opacity="0.6" />
+
+  <!-- EJE DE COHERENCIA AXIAL (0 ms Lag Point) -->
+  <circle cx="250" cy="280" r="4.5" fill="url(#sloneTitaniumMaster)" opacity="0.5" />
+</svg>

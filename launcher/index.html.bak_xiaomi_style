@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SLÖNE</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
+  <style>
+    :root {
+      --bg: #05070B;
+      --bg-surface: rgba(18, 24, 38, 0.7);
+      --bg-surface-hover: rgba(28, 36, 56, 0.95);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #E3FF00;
+      --accent-glow: rgba(227, 255, 0, 0.35);
+      --cyan: #00E5FF;
+      --text: #FFFFFF;
+      --text-muted: #8E98B0;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      user-select: none;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 6rem;
+      background-image: 
+        radial-gradient(circle at 10% 5%, rgba(227, 255, 0, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 12%, rgba(0, 229, 255, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 50% 100%, rgba(12, 17, 28, 0.9) 0%, transparent 70%);
+      background-attachment: fixed;
+    }
+
+    /* ── ENFOQUE D-PAD ULTRA-VISUAL PARA MANDO SMART TV ── */
+    :focus, :focus-visible, .focused {
+      outline: 3px solid var(--accent) !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 25px var(--accent-glow), 0 0 45px rgba(227, 255, 0, 0.35) !important;
+      transform: scale(1.04) !important;
+      z-index: 100 !important;
+      transition: all 0.14s cubic-bezier(0.2, 0, 0, 1) !important;
+    }
+
+    /* ── 1. CABECERA LIMPIA Y MINIMALISTA ── */
+    #MainHeader {
+      position: sticky;
+      top: 0;
+      z-index: 300;
+      background: rgba(5, 7, 11, 0.92);
+      backdrop-filter: blur(25px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand-logo {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-logo::after {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-item {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    .nav-item:hover, .nav-item:focus, .nav-item.active {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFF;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .nav-item.active {
+      background: #FFF;
+      color: #05070B;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+    .clock-display {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #FFF;
+      letter-spacing: 1px;
+    }
+
+    /* ── CONTENEDOR PRINCIPAL ── */
+    .viewport {
+      padding: 1.5rem 3rem;
+      max-width: 1780px;
+      margin: 0 auto;
+    }
+
+    /* ── 2. HERO BILLBOARD CINEMATOGRÁFICO (SIN PUBLICIDAD) ── */
+    .hero-billboard {
+      position: relative;
+      width: 100%;
+      min-height: 420px;
+      border-radius: 24px;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 3rem 3.5rem;
+      background: 
+        linear-gradient(180deg, rgba(5,7,11,0.2) 0%, rgba(5,7,11,0.85) 65%, rgba(5,7,11,1) 100%),
+        radial-gradient(circle at 80% 30%, rgba(227, 255, 0, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 20% 40%, rgba(0, 110, 255, 0.15) 0%, transparent 60%),
+        #090D18;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+    }
+    .hero-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .badge-live {
+      background: #FF0033;
+      color: #FFF;
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .badge-quality {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFF;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      text-shadow: 0 4px 25px rgba(0, 0, 0, 0.9);
+    }
+    .hero-subtitle {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .hero-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 680px;
+      margin-bottom: 24px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn-main {
+      background: var(--accent);
+      color: #05070B;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 12px 26px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 0 25px var(--accent-glow);
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    .btn-main:hover, .btn-main:focus {
+      background: #EEFF44;
+      transform: scale(1.05);
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFF;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 12px 22px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    .btn-outline:hover, .btn-outline:focus {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: #FFF;
+      transform: scale(1.05);
+    }
+
+    /* ── 3. MIS APLICACIONES (CASILLAS ESTILO APPLE TV / XIAOMI) ── */
+    .section-header {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .app-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 8px 4px 20px 4px;
+      scrollbar-width: none;
+    }
+    .app-card {
+      min-width: 145px;
+      max-width: 145px;
+      height: 135px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+      outline: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .app-card:hover, .app-card:focus {
+      background: var(--bg-surface-hover);
+      border-color: var(--accent);
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.8), 0 0 20px var(--accent-glow);
+    }
+    .app-icon {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+    .app-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #FFF;
+      text-align: center;
+      width: 90%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── 4. MULTIVIEW STADIUM 4X ── */
+    .stadium-wrap {
+      background: rgba(10, 14, 22, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 1.8rem;
+      margin: 2.5rem 0;
+    }
+    .stadium-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .stadium-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stadium-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stadium-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      min-height: 480px;
+    }
+    .stadium-grid.grid-1x {
+      grid-template-columns: 1fr;
+    }
+    .screen-box {
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      border: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .screen-box.active-box {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px var(--accent-glow);
+    }
+    .screen-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      padding: 10px 14px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, transparent 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .screen-name {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #FFF;
+    }
+    .screen-audio-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #AAA;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .screen-audio-tag.active {
+      background: var(--accent);
+      color: #05070B;
+      border-color: var(--accent);
+    }
+    .screen-video {
+      width: 100%;
+      height: 100%;
+      min-height: 240px;
+      object-fit: cover;
+      background: #000;
+    }
+
+    /* ── FAN AUDIO BAR ── */
+    .fan-audio-bar {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+    .radio-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .radio-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    .radio-pill:hover, .radio-pill:focus, .radio-pill.active {
+      background: var(--accent);
+      color: #05070B;
+      border-color: var(--accent);
+      font-weight: 800;
+    }
+
+    /* ── 5. CARRUSELES DE CANALES DE TV (CASILLAS 16:9) ── */
+    .carousel-section {
+      margin-bottom: 2.8rem;
+    }
+    .carousel-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 8px 4px 18px 4px;
+      scrollbar-width: none;
+    }
+    .channel-card {
+      min-width: 250px;
+      max-width: 250px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      outline: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .channel-card:hover, .channel-card:focus {
+      background: var(--bg-surface-hover);
+      border-color: var(--accent);
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.8), 0 0 20px var(--accent-glow);
+    }
+    .card-thumb {
+      height: 125px;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0%, #000 85%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+    .card-logo {
+      max-height: 85px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .card-info {
+      padding: 12px 14px;
+      background: rgba(10, 14, 22, 0.85);
+      border-top: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #FFF;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .card-cat {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .card-buttons {
+      display: flex;
+      gap: 6px;
+    }
+    .card-btn {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+      outline: none;
+    }
+    .card-btn-play {
+      background: var(--accent);
+      color: #05070B;
+    }
+    .card-btn-tv {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFF;
+      border: 1px solid var(--border);
+    }
+
+    /* ── 6. BUSCADOR SHIELD (LIMPIO Y PRIVADO) ── */
+    .search-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    .search-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .search-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 1rem;
+      color: #FFF;
+      outline: none;
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+    .search-btn {
+      background: var(--accent);
+      color: #05070B;
+      border: none;
+      padding: 0 24px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. CABECERA LIMPIA Y MINIMALISTA -->
+  <header id="MainHeader">
+    <div class="brand-logo">SLÖNE</div>
+    <nav class="nav-links">
+      <button class="nav-item active" tabindex="0" onclick="scrollToSection('heroBillboard')">Inicio</button>
+      <button class="nav-item" tabindex="0" onclick="scrollToSection('dockSection')">Apps</button>
+      <button class="nav-item" tabindex="0" onclick="scrollToSection('secFutbol')">Fútbol</button>
+      <button class="nav-item" tabindex="0" onclick="scrollToSection('stadiumSection')">Multiview 4X</button>
+      <button class="nav-item" tabindex="0" onclick="scrollToSection('secMotor')">Motor</button>
+      <button class="nav-item" tabindex="0" onclick="scrollToSection('secTdt')">Canales</button>
+      <button class="nav-item" tabindex="0" onclick="scrollToSection('shieldBrowser')">Buscar</button>
+    </nav>
+    <div class="clock-display" id="liveClock">14:15</div>
+  </header>
+
+  <div class="viewport">
+
+    <!-- 2. HERO BILLBOARD CINEMATOGRÁFICO DE ALTO IMPACTO (0% PUBLICIDAD) -->
+    <section class="hero-billboard" id="heroBillboard">
+      <div class="hero-badge-row">
+        <span class="badge-live">🔴 EN DIRECTO</span>
+        <span class="badge-quality">4K UHD</span>
+        <span class="badge-quality">M+ LIGA DE CAMPEONES</span>
+      </div>
+      <h1 class="hero-title">FC BARCELONA vs CHAMPIONS LEAGUE</h1>
+      <div class="hero-subtitle">Fútbol Club Barcelona · Narración en català con Joan Maria Pou (RAC1)</div>
+      <p class="hero-desc">
+        Disfruta del partido sin comentaristas madridistas, con señal limpia y el audio de la radio sincronizado al milisegundo.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-main" tabindex="0" onclick="playInActiveScreen({url: 'https://rtvelivestream.rtve.es/rtvesec/tdp/tdp_main.m3u8', name: 'Barça en Directo'})">
+          <span>▶️ Ver Partido</span>
+        </button>
+        <button class="btn-outline" tabindex="0" onclick="setRadioTrack('https://stream.rac1.cat/rac1.mp3', 'RAC1 (Pou)', null)">
+          <span>🎙️ Radio RAC1</span>
+        </button>
+        <button class="btn-outline" tabindex="0" onclick="scrollToSection('stadiumSection'); setStadiumMode(4);">
+          <span>🏟️ Modo 4 Pantallas</span>
+        </button>
+        <button class="btn-outline" tabindex="0" onclick="launchExternalStream('http://398607.solanaflix.com/live/TV-76173252/624816943106/112675.ts', 'Barça 4K')">
+          <span>⚡ TiviMate</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. MIS APLICACIONES (CASILLAS ESTILO APPLE TV / XIAOMI LIMPIAS) -->
+    <section id="dockSection" style="margin-bottom: 2.5rem;">
+      <div class="section-header">
+        <span>Aplicaciones</span>
+      </div>
+      <div class="app-row">
+        <div class="app-card" tabindex="0" onclick="launchApp('com.android.vending', 'Play Store')">
+          <div class="app-icon">🛍️</div>
+          <div class="app-label">Play Store</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('org.smarttube.stable', 'SmartTube 4K')">
+          <div class="app-icon">▶️</div>
+          <div class="app-label">SmartTube 4K</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('ar.tvplayer.tv', 'TiviMate VIP')">
+          <div class="app-icon">⚡</div>
+          <div class="app-label">TiviMate</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('com.phlox.tvwebbrowser', 'Navegador Web')">
+          <div class="app-icon">🌐</div>
+          <div class="app-label">Navegador</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('com.netflix.ninja', 'Netflix')">
+          <div class="app-icon">🍿</div>
+          <div class="app-label">Netflix</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('com.amazon.amazonvideo.livingroom', 'Prime Video')">
+          <div class="app-icon">📦</div>
+          <div class="app-label">Prime Video</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('cat.ccma.androidtv.tv3', '3Cat / TV3')">
+          <div class="app-icon">🔴</div>
+          <div class="app-label">3Cat / TV3</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('com.rtve.androidtv', 'RTVE Play')">
+          <div class="app-icon">🔵</div>
+          <div class="app-label">RTVE Play</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('com.esaba.downloader', 'Downloader')">
+          <div class="app-icon">📥</div>
+          <div class="app-label">Downloader</div>
+        </div>
+        <div class="app-card" tabindex="0" onclick="launchApp('com.android.tv.settings', 'Ajustes TV')">
+          <div class="app-icon">⚙️</div>
+          <div class="app-label">Ajustes</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MULTIVIEW STADIUM 4X & FAN AUDIO -->
+    <section class="stadium-wrap" id="stadiumSection">
+      <div class="stadium-top">
+        <div class="stadium-title">
+          <span>🏟️ Multiview 4X</span>
+          <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">· Audio Activo: <strong id="lblActiveScreenName" style="color:var(--accent);">[1] Teledeporte HD</strong></span>
+        </div>
+        <div class="stadium-controls">
+          <button class="btn-outline" style="padding:6px 14px; font-size:0.82rem;" id="btn4x" onclick="setStadiumMode(4)">4 Pantallas</button>
+          <button class="btn-outline" style="padding:6px 14px; font-size:0.82rem;" id="btn1x" onclick="setStadiumMode(1)">1 Pantalla</button>
+          <button class="btn-outline" style="padding:6px 14px; font-size:0.82rem;" onclick="swapScreens(0, 1)">🔀 Cambiar [1 ⇄ 2]</button>
+          <button class="btn-outline" style="padding:6px 14px; font-size:0.82rem;" onclick="toggleFullscreen()">⛶ Maximizar</button>
+        </div>
+      </div>
+
+      <div class="stadium-grid" id="stadiumGrid">
+        <div class="screen-box active-box" id="box0" onclick="focusScreen(0)">
+          <div class="screen-header">
+            <span class="screen-name" id="qname0">[1] Teledeporte HD</span>
+            <button class="screen-audio-tag active" id="qaud0" onclick="event.stopPropagation(); setScreenAudio(0)">🔊 AUDIO 1</button>
+          </div>
+          <video class="screen-video" id="v0" autoplay muted playsinline></video>
+        </div>
+        <div class="screen-box" id="box1" onclick="focusScreen(1)">
+          <div class="screen-header">
+            <span class="screen-name" id="qname1">[2] Real Madrid TV</span>
+            <button class="screen-audio-tag" id="qaud1" onclick="event.stopPropagation(); setScreenAudio(1)">🔇 MUTE</button>
+          </div>
+          <video class="screen-video" id="v1" autoplay muted playsinline></video>
+        </div>
+        <div class="screen-box" id="box2" onclick="focusScreen(2)">
+          <div class="screen-header">
+            <span class="screen-name" id="qname2">[3] Esport3</span>
+            <button class="screen-audio-tag" id="qaud2" onclick="event.stopPropagation(); setScreenAudio(2)">🔇 MUTE</button>
+          </div>
+          <video class="screen-video" id="v2" autoplay muted playsinline></video>
+        </div>
+        <div class="screen-box" id="box3" onclick="focusScreen(3)">
+          <div class="screen-header">
+            <span class="screen-name" id="qname3">[4] TV3 HD</span>
+            <button class="screen-audio-tag" id="qaud3" onclick="event.stopPropagation(); setScreenAudio(3)">🔇 MUTE</button>
+          </div>
+          <video class="screen-video" id="v3" autoplay muted playsinline></video>
+        </div>
+      </div>
+
+      <!-- FAN AUDIO RADIOS -->
+      <div class="fan-audio-bar">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:0.85rem; font-weight:800; color:var(--accent);">🎙️ AUDIO EN DIRECTO:</span>
+          <div class="radio-pills">
+            <button class="radio-pill active" onclick="setRadioTrack('tv', 'Audio TV Original', this)">📺 Audio TV</button>
+            <button class="radio-pill" onclick="setRadioTrack('https://stream.rac1.cat/rac1.mp3', 'RAC1 (Pou)', this)">🔵🔴 RAC1</button>
+            <button class="radio-pill" onclick="setRadioTrack('https://directes-radio-cat.3catdirectes.cat/live-origin/catradio-hls/master.m3u8', 'CatRàdio', this)">🔵🔴 CatRàdio</button>
+            <button class="radio-pill" onclick="setRadioTrack('ambient', 'Estadio Puro', this)">🏟️ Estadio</button>
+            <button class="radio-pill" onclick="setRadioTrack('https://playerservices.streamtheworld.com/api/livestream-redirect/CADENASER.mp3', 'Cadena SER', this)">📻 Cadena SER</button>
+            <button class="radio-pill" onclick="setRadioTrack('https://flive.cope.stream.flumotion.com/cope/net1.mp3', 'COPE', this)">📻 COPE</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Sincronizar Audio:</span>
+          <button class="radio-pill" onclick="adjustAudioDelay(-0.2)">-0.2s</button>
+          <span style="font-size:0.85rem; font-weight:800; color:var(--accent);" id="lblDelayVal">0.0s</span>
+          <button class="radio-pill" onclick="adjustAudioDelay(+0.2)">+0.2s</button>
+        </div>
+      </div>
+      <audio id="radioPlayer" preload="none"></audio>
+    </section>
+
+    <!-- 5. CARRUSELES DE CANALES DE TV (CASILLAS 16:9 ELEGANTES) -->
+    <section class="carousel-section" id="secFutbol">
+      <div class="section-header">
+        <span>Fútbol & Champions League</span>
+      </div>
+      <div class="carousel-row" id="rowFutbol"></div>
+    </section>
+
+    <section class="carousel-section" id="secMotor">
+      <div class="section-header">
+        <span>Motor, F1 & MotoGP</span>
+      </div>
+      <div class="carousel-row" id="rowMotor"></div>
+    </section>
+
+    <section class="carousel-section" id="secTdt">
+      <div class="section-header">
+        <span>Televisión en Directo & TDT</span>
+      </div>
+      <div class="carousel-row" id="rowTdt"></div>
+    </section>
+
+    <section class="carousel-section" id="secCine">
+      <div class="section-header">
+        <span>Cine & Series</span>
+      </div>
+      <div class="carousel-row" id="rowCine"></div>
+    </section>
+
+    <!-- 6. BUSCADOR WEB (MINIMALISTA Y DIRECTO) -->
+    <section class="search-section" id="shieldBrowser">
+      <div class="section-header">
+        <span>Buscador Web</span>
+      </div>
+      <form class="search-box" onsubmit="event.preventDefault(); executeSearch();">
+        <input type="text" id="omniboxInput" class="search-input" placeholder="Buscar en la web privada o escribir dirección..." autocomplete="off">
+        <button type="submit" class="search-btn">Buscar</button>
+      </form>
+    </section>
+
+  </div>
+
+  <script>
+    // ── ESTADO GLOBAL ──
+    let activeScreenIdx = 0;
+    let is4x = true;
+    let audioDelay = 0.0;
+    let currentStreams = [
+      { url: 'https://rtvelivestream.rtve.es/rtvesec/tdp/tdp_main.m3u8', name: 'Teledeporte HD' },
+      { url: 'https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8', name: 'Real Madrid TV' },
+      { url: 'https://directes-tv-cat.3catdirectes.cat/live-origin/esport3-hls/master.m3u8', name: 'Esport3 HD' },
+      { url: 'https://directes-tv-cat.3catdirectes.cat/live-origin/tv3-hls/master.m3u8', name: 'TV3 HD' }
+    ];
+    let hlsPlayers = [null, null, null, null];
+    let tsPlayers = [null, null, null, null];
+
+    function stopStream(idx) {
+      if (hlsPlayers[idx]) {
+        try { hlsPlayers[idx].destroy(); } catch(e) {}
+        hlsPlayers[idx] = null;
+      }
+      if (tsPlayers[idx]) {
+        try {
+          tsPlayers[idx].pause();
+          tsPlayers[idx].unload();
+          tsPlayers[idx].detachMediaElement();
+          tsPlayers[idx].destroy();
+        } catch(e) {}
+        tsPlayers[idx] = null;
+      }
+      const v = document.getElementById(`v${idx}`);
+      if (v) {
+        v.pause();
+        v.removeAttribute('src');
+        v.load();
+      }
+    }
+
+    function playStreamOnElement(idx, streamUrl) {
+      stopStream(idx);
+      const v = document.getElementById(`v${idx}`);
+      if (!v) return;
+
+      const isTs = streamUrl.includes('.ts') || streamUrl.includes('/live/');
+      const isPublicCdn = streamUrl.includes('rtve.es') || streamUrl.includes('akamaized.net') || streamUrl.includes('3catdirectes.cat');
+
+      const effectiveUrl = (!isPublicCdn && streamUrl.startsWith('http'))
+        ? `/api/stream/proxy?url=${encodeURIComponent(streamUrl)}`
+        : streamUrl;
+
+      if (isTs && window.mpegts && mpegts.isSupported()) {
+        try {
+          const player = mpegts.createPlayer({
+            type: 'mse',
+            isLive: true,
+            url: effectiveUrl
+          }, {
+            enableWorker: true,
+            lazyLoad: false,
+            liveBufferLatencyChasing: true
+          });
+          player.attachMediaElement(v);
+          player.load();
+          player.play();
+          tsPlayers[idx] = player;
+          return;
+        } catch (err) {
+          console.warn("Fallo mpegts, usando fallback HLS:", err);
+        }
+      }
+
+      if (Hls.isSupported()) {
+        const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+        hls.loadSource(effectiveUrl);
+        hls.attachMedia(v);
+        hlsPlayers[idx] = hls;
+      } else {
+        v.src = effectiveUrl;
+      }
+      v.play().catch(() => {});
+    }
+
+    function playInActiveScreen(channel) {
+      const idx = activeScreenIdx;
+      currentStreams[idx] = { url: channel.url, name: channel.name };
+      document.getElementById(`qname${idx}`).innerText = `[${idx+1}] ${channel.name}`;
+      document.getElementById('lblActiveScreenName').innerText = `[${idx+1}] ${channel.name}`;
+      playStreamOnElement(idx, channel.url);
+      scrollToSection('stadiumSection');
+    }
+
+    function swapScreens(a, b) {
+      const temp = currentStreams[a];
+      currentStreams[a] = currentStreams[b];
+      currentStreams[b] = temp;
+      playIndex(a, currentStreams[a]);
+      playIndex(b, currentStreams[b]);
+    }
+
+    function playIndex(idx, streamObj) {
+      document.getElementById(`qname${idx}`).innerText = `[${idx+1}] ${streamObj.name}`;
+      playStreamOnElement(idx, streamObj.url);
+    }
+
+    function focusScreen(idx) {
+      activeScreenIdx = idx;
+      for (let i = 0; i < 4; i++) {
+        const box = document.getElementById(`box${i}`);
+        if (box) box.classList.toggle('active-box', i === idx);
+      }
+      document.getElementById('lblActiveScreenName').innerText = `[${idx+1}] ${currentStreams[idx].name}`;
+    }
+
+    function setScreenAudio(idx) {
+      focusScreen(idx);
+      for (let i = 0; i < 4; i++) {
+        const v = document.getElementById(`v${i}`);
+        const tag = document.getElementById(`qaud${i}`);
+        if (v) v.muted = (i !== idx);
+        if (tag) {
+          tag.innerText = (i === idx) ? `🔊 AUDIO ${i+1}` : "🔇 MUTE";
+          tag.classList.toggle('active', i === idx);
+        }
+      }
+      const radio = document.getElementById('radioPlayer');
+      radio.pause();
+    }
+
+    function setStadiumMode(mode) {
+      const grid = document.getElementById('stadiumGrid');
+      const b4 = document.getElementById('btn4x');
+      const b1 = document.getElementById('btn1x');
+      if (mode === 1) {
+        grid.className = 'stadium-grid grid-1x';
+        for (let i = 0; i < 4; i++) {
+          const b = document.getElementById(`box${i}`);
+          b.style.display = (i === activeScreenIdx) ? 'flex' : 'none';
+        }
+      } else {
+        grid.className = 'stadium-grid';
+        for (let i = 0; i < 4; i++) {
+          const b = document.getElementById(`box${i}`);
+          b.style.display = 'flex';
+        }
+      }
+    }
+
+    function setRadioTrack(url, name, btn) {
+      document.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const radio = document.getElementById('radioPlayer');
+      for (let i = 0; i < 4; i++) {
+        const v = document.getElementById(`v${i}`);
+        if (v) v.muted = true;
+      }
+
+      if (url === 'tv') {
+        radio.pause();
+        setScreenAudio(activeScreenIdx);
+        return;
+      } else if (url === 'ambient') {
+        radio.pause();
+        const v = document.getElementById(`v${activeScreenIdx}`);
+        if (v) v.muted = false;
+        return;
+      }
+
+      radio.src = url;
+      radio.play().catch(() => {});
+    }
+
+    function adjustAudioDelay(delta) {
+      audioDelay = Math.round((audioDelay + delta) * 10) / 10;
+      document.getElementById('lblDelayVal').innerText = `${audioDelay > 0 ? '+' : ''}${audioDelay.toFixed(1)}s`;
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    function scrollToSection(id) {
+      document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+      const activeTab = Array.from(document.querySelectorAll('.nav-item')).find(t => t.getAttribute('onclick')?.includes(id));
+      if (activeTab) activeTab.classList.add('active');
+
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+          const firstFocusable = el.querySelector('[tabindex="0"], button, input');
+          if (firstFocusable) firstFocusable.focus();
+        }, 150);
+      }
+    }
+
+    function executeSearch() {
+      const q = document.getElementById('omniboxInput').value.trim();
+      if (!q) return;
+      let targetUrl = q;
+      if (q.startsWith('http://') || q.startsWith('https://')) {
+        targetUrl = q;
+      } else if (q.includes('.') && !q.includes(' ')) {
+        targetUrl = 'https://' + q;
+      } else {
+        targetUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(q);
+      }
+      fetch(`/api/tv/open_url?url=${encodeURIComponent(targetUrl)}`).catch(() => {});
+    }
+
+    function launchApp(pkg, name) {
+      fetch(`/api/tv/launch?package=${encodeURIComponent(pkg)}`).catch(() => {});
+    }
+
+    function launchExternalStream(url, name) {
+      fetch(`/api/tv/play_external?url=${encodeURIComponent(url)}&package=ar.tvplayer.tv`).catch(() => {});
+    }
+
+    // ── CARGA DEL CATÁLOGO DE CANALES ──
+    async function loadCeoCatalog() {
+      try {
+        const res = await fetch('/api/tv/ceo_catalog');
+        const data = await res.json();
+        const cat = data.catalog || {};
+
+        renderCarousel('rowFutbol', cat.futbol || []);
+        renderCarousel('rowMotor', cat.motor || []);
+        renderCarousel('rowTdt', cat.tdt || []);
+        renderCarousel('rowCine', cat.cine || []);
+      } catch (e) {
+        console.error("Error cargando canales:", e);
+      }
+    }
+
+    function renderCarousel(containerId, list) {
+      const row = document.getElementById(containerId);
+      if (!row) return;
+      row.innerHTML = '';
+      list.forEach(ch => {
+        const card = document.createElement('div');
+        card.className = 'channel-card';
+        card.tabIndex = 0;
+        const logoUrl = ch.logo || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' fill=\'%23E3FF00\' viewBox=\'0 0 24 24\'><path d=\'M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z\'/></svg>';
+        const safeName = (ch.name || 'Canal').replace(/'/g, "\\'");
+        card.innerHTML = `
+          <div class="card-thumb">
+            <img src="${logoUrl}" class="card-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' fill=\'%23E3FF00\' viewBox=\'0 0 24 24\'><path d=\'M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z\'/></svg>'">
+          </div>
+          <div class="card-info">
+            <div class="card-title">${ch.name}</div>
+            <div class="card-cat">${ch.group || 'GENERAL'}</div>
+            <div class="card-buttons">
+              <button class="card-btn card-btn-play" onclick="event.stopPropagation(); playInActiveScreen({url: '${ch.url}', name: '${safeName}'})">▶ Ver</button>
+              <button class="card-btn card-btn-tv" onclick="event.stopPropagation(); launchExternalStream('${ch.url}', '${safeName}')">⚡ TiviMate</button>
+            </div>
+          </div>
+        `;
+        card.onclick = () => playInActiveScreen(ch);
+        row.appendChild(card);
+      });
+    }
+
+    // ── CONTROLADOR DE MANDO D-PAD ──
+    const radioStations = [
+      { id: 'tv', name: 'Audio TV' },
+      { id: 'https://stream.rac1.cat/rac1.mp3', name: 'RAC1' },
+      { id: 'https://directes-radio-cat.3catdirectes.cat/live-origin/catradio-hls/master.m3u8', name: 'CatRàdio' },
+      { id: 'ambient', name: 'Estadio' },
+      { id: 'https://playerservices.streamtheworld.com/api/livestream-redirect/CADENASER.mp3', name: 'SER' },
+      { id: 'https://flive.cope.stream.flumotion.com/cope/net1.mp3', name: 'COPE' }
+    ];
+    let currentRadioIdx = 0;
+
+    window.addEventListener('keydown', (e) => {
+      const key = e.key;
+      const code = e.keyCode;
+
+      if (key >= '1' && key <= '4') {
+        const targetIdx = parseInt(key, 10) - 1;
+        setScreenAudio(targetIdx);
+        return;
+      }
+      if (key === 'f' || key === 'F' || code === 186) {
+        toggleFullscreen();
+        return;
+      }
+      if (key === 'r' || key === 'R') {
+        currentRadioIdx = (currentRadioIdx + 1) % radioStations.length;
+        const st = radioStations[currentRadioIdx];
+        setRadioTrack(st.id, st.name, null);
+        return;
+      }
+      if (key === 'm' || key === 'M') {
+        const v = document.getElementById(`v${activeScreenIdx}`);
+        if (v) v.muted = !v.muted;
+        return;
+      }
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+        setTimeout(() => {
+          const act = document.activeElement;
+          if (act && act !== document.body) {
+            act.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+          }
+        }, 50);
+      }
+    });
+
+    // ── RELOJ ──
+    setInterval(() => {
+      const now = new Date();
+      const clk = document.getElementById('liveClock');
+      if (clk) {
+        clk.innerText = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      }
+    }, 1000);
+
+    window.onload = () => {
+      for (let i = 0; i < 4; i++) {
+        playStreamOnElement(i, currentStreams[i].url);
+      }
+      loadCeoCatalog();
+      setScreenAudio(0);
+    };
+  </script>
+</body>
+</html>
