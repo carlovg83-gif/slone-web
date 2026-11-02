@@ -50,6 +50,7 @@ body{background:#000;color:#fff;font-family:'Segoe UI',system-ui}
 .of.destacada{border-color:var(--y);box-shadow:0 0 30px rgba(227,255,0,.15)}
 footer{text-align:center;color:#555;font-size:11px;margin-top:40px;padding:20px}
 </style>
+<link rel="icon" href="favicon.svg">
 </head>
 <body>
 <div class="wrap">
@@ -188,6 +189,32 @@ details p{color:#bbb;font-size:13px;margin-top:8px;line-height:1.6}
 <img src="assets/capturas/Captura_de_pantalla_20261102_202105.png.jpg" style="width:100%;border-radius:12px;border:1px solid #222" alt="SLÖNE reproductor">
 <img src="assets/capturas/Captura_de_pantalla_20261102_205302.png.jpg" style="width:100%;border-radius:12px;border:1px solid #222" alt="SLÖNE ajustes">
 </div>
+
+<div style="max-width:520px;margin:36px auto 0;background:#0c0c0c;border:1px solid #e3ff00;border-radius:14px;padding:26px">
+  <h2 style="color:#e3ff00;text-align:center;margin-bottom:16px">🎟️ RESERVAR MI PLAZA</h2>
+  <form onsubmit="reservar(event)">
+    <input id="nombre" placeholder="Tu nombre" required style="width:100%;padding:12px;margin-bottom:10px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:14px">
+    <input id="email" type="email" placeholder="Tu email" required style="width:100%;padding:12px;margin-bottom:10px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:14px">
+    <select id="plan" style="width:100%;padding:12px;margin-bottom:14px;background:#111;border:1px solid #333;border-radius:8px;color:#fff;font-size:14px">
+      <option>👑 Pionero Ö — 149€ vitalicio</option>
+      <option>⚽ Pass Sports — 3,99€/mes</option>
+      <option>🌍 SLÖNE ONE — 59,99€/año</option>
+    </select>
+    <button type="submit" style="width:100%;padding:14px;background:#e3ff00;color:#000;font-weight:900;font-size:16px;border:none;border-radius:10px;cursor:pointer">RESERVAR AHORA</button>
+    <p style="color:#777;font-size:11px;text-align:center;margin-top:10px">Sin pago ahora · te respondemos en 24h con los pasos</p>
+  </form>
+</div>
+<script>
+function reservar(e){
+  e.preventDefault();
+  var n=document.getElementById('nombre').value;
+  var em=document.getElementById('email').value;
+  var p=document.getElementById('plan').value;
+  var asunto=encodeURIComponent('Reserva SLÖNE: '+p);
+  var cuerpo=encodeURIComponent('Nombre: '+n+'\nEmail: '+em+'\nPlan: '+p+'\n\nQuiero reservar mi plaza de Fundador.');
+  window.location.href='mailto:contacto@slone.tv?subject='+asunto+'&body='+cuerpo;
+}
+</script>
 <h2 style="margin-top:40px">🤝 COMPROMISO SLÖNE (por escrito)</h2>
 <div class="funciones">
 <div class="fn"><div class="ico">🚫</div><h3>Cero anuncios. Siempre.</h3><p>Ni ahora ni nunca. Es nuestra razón de existir.</p></div>
