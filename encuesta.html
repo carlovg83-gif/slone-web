@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encuesta oficial — ¿SLÖNE o ZERÖ?</title>
+<style>
+:root{--y:#e3ff00}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.tarjeta{max-width:760px;width:100%;background:#0a0a0a;border:1px solid #232323;border-radius:18px;padding:40px 30px;text-align:center}
+.logo{width:110px;height:110px;color:var(--y);filter:drop-shadow(0 0 22px rgba(227,255,0,.6));margin:0 auto 8px}
+h1{font-size:34px;letter-spacing:2px}
+.pregunta{color:#999;margin:8px 0 26px;font-size:15px}
+.votos{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.voto{flex:1;min-width:230px;max-width:320px;background:#101010;border:1px solid #2a2a2a;border-radius:14px;padding:20px;text-decoration:none;color:#fff;transition:border-color .2s,transform .15s}
+.voto:hover{border-color:var(--y);transform:translateY(-3px)}
+.voto .nombre{font-weight:900;font-size:22px;letter-spacing:2px}
+.voto .num{color:var(--y);font-size:38px;font-weight:900;margin:8px 0}
+.barra{height:9px;background:#1c1c1c;border-radius:99px;overflow:hidden;margin:8px 0 6px}
+.barra i{display:block;height:100%;background:var(--y);border-radius:99px;width:0;transition:width .6s}
+.voto .pct{color:#888;font-size:13px}
+.como{color:#777;font-size:13px;margin-top:22px;line-height:1.8}
+.como b{color:#ddd}
+.share{margin-top:18px}
+.share a{display:inline-block;background:var(--y);color:#000;font-weight:800;padding:12px 26px;border-radius:12px;text-decoration:none;margin:4px}
+.fecha{color:#555;font-size:11px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="tarjeta">
+  <svg class="logo" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="199" cy="74" r="36"/>
+    <circle cx="313" cy="74" r="36"/>
+    <path fill-rule="evenodd" d="M 82,300 a 174,174 0 1,0 348,0 a 174,174 0 1,0 -348,0 Z M 136,300 a 120,120 0 1,0 240,0 a 120,120 0 1,0 -240,0 Z"/>
+  </svg>
+  <h1>¿SLÖNE o ZERÖ?</h1>
+  <p class="pregunta">Encuesta oficial para elegir el nombre de la app de streaming soberano. Tu voto cuenta.</p>
+  <div class="votos">
+    <a class="voto" target="_blank" rel="noopener" href="https://github.com/carlovg83-gif/slone-web/issues/1">
+      <div class="nombre">Ö SLÖNE</div>
+      <div class="num" id="n-slone">…</div>
+      <div class="barra"><i id="b-slone"></i></div>
+      <div class="pct" id="p-slone">vota con 👍</div>
+    </a>
+    <a class="voto" target="_blank" rel="noopener" href="https://github.com/carlovg83-gif/slone-web/issues/2">
+      <div class="nombre">Ö ZERÖ</div>
+      <div class="num" id="n-zero">…</div>
+      <div class="barra"><i id="b-zero"></i></div>
+      <div class="pct" id="p-zero">vota con 🚀</div>
+    </a>
+  </div>
+  <p class="como"><b>Cómo votar:</b> abre el enlace, entra con tu cuenta de GitHub (gratis) y dale a la reacción<br>
+  👍 = SLÖNE &nbsp;·&nbsp; 🚀 = ZERÖ &nbsp;·&nbsp; ❤️ también suma</p>
+  <div class="share">
+    <a href="https://wa.me/?text=Vota%20el%20nombre%20oficial%3A%20https%3A%2F%2Fcarlovg83-gif.github.io%2Fslone-web%2Fencuesta.html" target="_blank" rel="noopener">📲 Compartir por WhatsApp</a>
+    <a href="https://t.me/share/url?url=https%3A%2F%2Fcarlovg83-gif.github.io%2Fslone-web%2Fencuesta.html&text=Vota%20el%20nombre%20oficial%3A%20%C2%BFSL%C3%96NE%20o%20ZER%C3%96%3F" target="_blank" rel="noopener">✈️ Compartir por Telegram</a>
+  </div>
+  <div class="fecha">Objetivo: 50–100 votos reales · SLÖNE CORP © 2026</div>
+</div>
+<script>
+(function(){
+  function reacciones(n){ return fetch("https://api.github.com/repos/carlovg83-gif/slone-web/issues/"+n)
+    .then(function(r){return r.json();})
+    .then(function(d){ var re=d.reactions||{}; return (re["+1"]||0)+(re.rocket||0)+(re.heart||0); })
+    .catch(function(){ return null; }); }
+  function pintar(){
+    Promise.all([reacciones(1),reacciones(2)]).then(function(v){
+      var a=v[0], b=v[1];
+      if(a===null||b===null){ return; }
+      var tot=a+b, pa=tot?Math.round(100*a/tot):0, pb=tot?100-pa:0;
+      document.getElementById("n-slone").textContent=a;
+      document.getElementById("n-zero").textContent=b;
+      document.getElementById("b-slone").style.width=pa+"%";
+      document.getElementById("b-zero").style.width=pb+"%";
+      document.getElementById("p-slone").textContent=pa+"% · vota con 👍";
+      document.getElementById("p-zero").textContent=pb+"% · vota con 🚀";
+    });
+  }
+  pintar(); setInterval(pintar, 15000);
+})();
+</script>
+</body>
+</html>
